@@ -1,0 +1,14 @@
+---
+- name: Clone from GitHub [Caldera]
+  ansible.builtin.command: git clone https://github.com/mitre/caldera.git --recursive --branch {{ caldera_server.caldera_version }}
+
+- name: Install python dependencies [Caldera]
+  ansible.builtin.command: >
+    cd caldera
+    pipenv install -r requirements.txt
+    pipenv install -r requirements-dev.txt
+
+- name: Start Server [Caldera]
+  ansible.builtin.command: >
+    cd ~/caldera
+    nohup pipenv run server.py --insecure &

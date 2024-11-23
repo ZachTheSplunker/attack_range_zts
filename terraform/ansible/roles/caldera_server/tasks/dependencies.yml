@@ -1,0 +1,9 @@
+---
+- name: Installing Dependencies [Caldera]
+  ansible.builtin.apt:
+    name:
+      - git
+      - curl
+      - wget
+      - pipenv
+    state: latest

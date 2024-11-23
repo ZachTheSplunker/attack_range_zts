@@ -1,0 +1,13 @@
+---
+- name: Download GO [Caldera]
+  ansible.builtin.get_url:
+    url: "https://go.dev/dl/go{{ caldera_server.go_version }}.linux-amd64.tar.gz"
+    dest: /tmp/go.tar.gz
+
+- name: Install GO [Caldera]
+  ansible.builtin.unarchive:
+    src: /tmp/go.tar.gz
+    dest: /usr/local
+    remote_src: yes
+    owner: root
+    group: root

@@ -103,3 +103,12 @@ module "snort-server" {
   linux_server_instances = module.linux-server.linux_servers
   splunk_server = var.splunk_server
 }
+
+module "caldera-server" {
+  source = "./modules/caldera-server"
+	vpc_security_group_ids = module.networkModule.sg_vpc_id
+	ec2_subnet_id = module.networkModule.ec2_subnet_id
+  general = var.general
+  caldera_server = var.caldera_server
+  aws = var.aws
+}

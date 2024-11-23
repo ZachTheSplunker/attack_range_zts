@@ -1,0 +1,13 @@
+---
+- name: Download UPX [Caldera]
+  ansible.builtin.get_url:
+    url: "https://github.com/upx/upx/releases/download/v{{ caldera_server.upx_version }}/upx-4.2.4-amd64_linux.tar.xz"
+    dest: /tmp/upx.tar.xz
+
+- name: Install UPX [Caldera]
+  ansible.builtin.unarchive:
+    src: /tmp/upx.tar.xz
+    dest: /usr/local
+    remote_src: yes
+    owner: root
+    group: root
