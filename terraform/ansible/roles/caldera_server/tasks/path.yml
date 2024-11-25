@@ -1,12 +1,12 @@
 ---
 - name: Update Path [Caldera]
   ansible.builtin.blockinfile:
-  path: "{{ ansible_env.HOME }}/.bashrc"
-  insertafter: EOF
-  append_newline: true
-  prepend_newline: true
-  block: |
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    export PATH="/usr/local/go/bin:/usr/local:$PATH"
+    path: "/home/admin/.bashrc"
+    insertafter: EOF
+    append_newline: true
+    prepend_newline: true
+    block: |
+      export PATH="/usr/local/go/bin:/usr/local/upx-{{ caldera_server.upx_version }}-amd64_linux:$PATH"
+
+- name: Export PATH [Caldera]
+  ansible.builtin.shell: . ~/.bashrc

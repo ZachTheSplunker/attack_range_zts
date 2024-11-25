@@ -24,7 +24,13 @@ resource "aws_instance" "caldera_server" {
   vpc_security_group_ids = [var.vpc_security_group_ids]
   private_ip             = "10.0.1.60"
   associate_public_ip_address = true
-  
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = "60"
+    delete_on_termination = "true"
+  }
+
   tags = {
     Name = "ar-caldera-${var.general.key_name}-${var.general.attack_range_name}"
   }
@@ -48,7 +54,9 @@ resource "aws_instance" "caldera_server" {
         "ansible_python_interpreter": "/usr/bin/python3",
         "general": ${jsonencode(var.general)},
         "aws": ${jsonencode(var.aws)},
-        "caldera_server": ${jsonencode(var.caldera_server)}
+        "caldera_server": ${jsonencode(var.caldera_server)},
+        "public_ip": ${jsonencode(self.public_ip)},
+        "aws_eip": ${jsonencode(var.aws.use_elastic_ips)}
       }
       EOF
     EOT
@@ -66,4 +74,37 @@ resource "aws_instance" "caldera_server" {
 resource "aws_eip" "caldera_ip" {
   count    = (var.caldera_server.caldera_server == "1") && (var.aws.use_elastic_ips == "1") ? 1 : 0
   instance = aws_instance.caldera_server[0].id
+
+  provisioner "remote-exec" {
+    inline = ["echo booted"]
+
+    connection {
+      type        = "ssh"
+      user        = "admin"
+      host        = self.public_ip
+      private_key = file(var.aws.private_key_path)
+    }
+  }
+
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command = <<-EOT
+      cat <<EOF > vars/caldera_vars.json
+      {
+        "ansible_python_interpreter": "/usr/bin/python3",
+        "general": ${jsonencode(var.general)},
+        "aws": ${jsonencode(var.aws)},
+        "caldera_server": ${jsonencode(var.caldera_server)},
+        "public_ip": ${jsonencode(self.public_ip)}
+      }
+      EOF
+    EOT
+  }
+
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command = <<-EOT
+      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u admin --private-key '${var.aws.private_key_path}' -i '${self.public_ip},' caldera_eip.yml -e "@vars/caldera_vars.json"
+    EOT
+  }
 }

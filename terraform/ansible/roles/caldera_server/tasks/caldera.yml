@@ -1,14 +1,35 @@
 ---
 - name: Clone from GitHub [Caldera]
-  ansible.builtin.command: git clone https://github.com/mitre/caldera.git --recursive --branch {{ caldera_server.caldera_version }}
+  ansible.builtin.shell: |
+    cd ~/
+    git clone https://github.com/mitre/caldera.git --recursive {{ caldera_server.caldera_version }}
 
-- name: Install python dependencies [Caldera]
-  ansible.builtin.command: >
-    cd caldera
-    pipenv install -r requirements.txt
-    pipenv install -r requirements-dev.txt
+- name: Update URL [Caldera]
+  ansible.builtin.import_tasks: update_ip.yml
+  when: caldera_server_skip_start == false
 
-- name: Start Server [Caldera]
-  ansible.builtin.command: >
+- name: Update Password [Caldera]
+  ansible.builtin.replace:
+    path: /home/admin/caldera/conf/default.yml
+    regexp: 'admin$'
+    replace: "{{ general.attack_range_password }}"
+
+- name: Setup Server [Caldera]
+  ansible.builtin.shell: |
     cd ~/caldera
-    nohup pipenv run server.py --insecure &
+    reqs='/usr/local/go/bin:/usr/local/bin:/usr/bin:/bin'
+    upx=$(find /usr/local/upx-* -type d)
+    nvm=$(find /home/admin/.nvm/versions/node/*/bin -type d)
+    echo "PATH=$reqs:$upx:$nvm" > caldera.env
+    pipenv install
+    pipenv run pip install -r requirements-dev.txt
+
+- name: Create Systemd service [Caldera]
+  become: true
+  ansible.builtin.copy:
+    src: caldera.service
+    dest: /etc/systemd/system/
+    owner: root
+    group: root
+    mode: '0644'
+  notify: caldera_systemd

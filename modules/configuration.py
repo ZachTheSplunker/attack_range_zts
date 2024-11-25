@@ -558,6 +558,13 @@ starting configuration for AT-ST mech walker
             "name": "phantom_installer",
             "when": lambda answers: answers["phantom"],
         },
+        {
+            "type": "confirm",
+            "message": "shall we build a MITRE Caldera server for attack simulation",
+            "name": "caldera_server",
+            "default": False,
+            "when": lambda answers: configuration["general"]["cloud_provider"] == "aws",
+        },
     ]
 
     answers = questionary.prompt(questions)
@@ -586,6 +593,10 @@ starting configuration for AT-ST mech walker
         if answers["snort_server"]:
             configuration["snort_server"] = dict()
             configuration["snort_server"]["snort_server"] = "1"
+        
+        if answers["caldera_server"]:
+            configuration["caldera_server"] = dict()
+            configuration["caldera_server"]["caldera_server"] = "1"
 
     if answers["phantom"]:
         configuration["phantom_server"] = dict()

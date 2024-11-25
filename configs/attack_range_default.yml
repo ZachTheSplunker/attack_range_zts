@@ -282,12 +282,13 @@ caldera_server:
   # Enable MITRE Caldera Server by setting this to 1.
 
   hostname: "caldera"
-  # Specify the image used for Nginx Server.
+  # Specify the image used for Caldera Server.
 
   # ------ Changing the versions below could break MITRE Caldera -------------- #
 
-  caldera_version: "4.2.0"
-  # MITRE Caldera Version to install (https://github.com/mitre/caldera/releases).
+  caldera_version: ""
+  # MITRE Caldera Version to install (https://github.com/mitre/caldera/releases). Default: (left blank to pull latest)
+  # caldera_version: "--branch 5.0.0"
 
   go_version: "1.23.3"
   # GO version to install (https://go.dev/dl/).
@@ -295,7 +296,7 @@ caldera_server:
   nvm_version: "0.40.1"
   # NVM version to install (https://github.com/nvm-sh/nvm/releases).
 
-  node_version: "latest"
+  node_version: "22"
   # Node version to install (https://nodejs.org/en/download/package-manager).
 
   upx_version: "4.2.4"

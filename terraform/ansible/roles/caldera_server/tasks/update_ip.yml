@@ -1,0 +1,7 @@
+---
+- name: Update URL [Caldera]
+  ansible.builtin.lineinfile:
+    path: /home/admin/caldera/conf/default.yml
+    regexp: '^app\.frontend\.api_base_url'
+    line: "app.frontend.api_base_url: http://{{ public_ip }}:8888"
+  notify: caldera_systemd
