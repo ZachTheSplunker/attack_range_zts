@@ -331,7 +331,7 @@ class AwsController(AttackRangeController):
                     messages.append(
                         "\nAccess Caldera via:\n\tWeb > http://"
                         + instance["NetworkInterfaces"][0]["Association"]["PublicIp"]
-                        + ":8888 (may take up to 5 minutes to be ready after initial start)"
+                        + ":8888"
                         + "\n\tusername: red \n\tpassword: "
                         + self.config["general"]["attack_range_password"]
                         + "\n\tSSH > ssh -i"

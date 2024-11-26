@@ -209,6 +209,9 @@ windows_servers_default:
   # Install Bad Blood by setting this to 1 or 0.
   # More information in chapter Bad Blood under Attack Range Features.
 
+  install_caldera_agent: "0"
+  # Install a MITRE Caldera agent that connects to the Caldera Server.
+
   install_crowdstrike: "0"
   # Install CrowdStrike Falcon by setting this to 1.
 
@@ -251,6 +254,9 @@ linux_servers_default:
 
   cisco_secure_endpoint_linux_agent: "amp_Server_ubuntu-20-04-amd64.deb"
   # Name of the Cisco Secure Endpoint Linux Agent stored in apps/ folder.
+
+  install_caldera_agent: "0"
+  # Install a MITRE Caldera agent that connects to the Caldera Server.
 
 kali_server:
   kali_server: "0"
