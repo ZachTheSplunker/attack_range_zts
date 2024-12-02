@@ -18,11 +18,11 @@ data "aws_ami" "caldera_server" {
 resource "aws_instance" "caldera_server" {
   count                  = var.caldera_server.caldera_server == "1" ? 1 : 0
   ami                    = data.aws_ami.caldera_server[count.index].id
-  instance_type          = "t3.large"
+  instance_type          = "m5.2xlarge"
   key_name               = var.general.key_name
   subnet_id              = var.ec2_subnet_id
   vpc_security_group_ids = [var.vpc_security_group_ids]
-  private_ip             = "10.0.1.60"
+  private_ip             = var.caldera_server.private_ip
   associate_public_ip_address = true
 
   root_block_device {

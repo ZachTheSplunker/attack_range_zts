@@ -27,4 +27,3 @@
       vars:
         caldera_agent_server_type: "windows"
       when: caldera_server.caldera_server == "1" and windows_servers.install_caldera_agent == "1"
-

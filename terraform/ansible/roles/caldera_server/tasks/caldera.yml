@@ -14,6 +14,15 @@
     regexp: 'admin$'
     replace: "{{ general.attack_range_password }}"
 
+- name: Update Agents [Caldera]
+  ansible.builtin.lineinfile:
+    path: /home/admin/caldera/conf/agents.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: "sleep_max", line: 'sleep_max: 5' }
+    - { regexp: 'sleep_min', line: 'sleep_min: 2'}
+
 - name: Setup Server [Caldera]
   ansible.builtin.shell: |
     cd ~/caldera

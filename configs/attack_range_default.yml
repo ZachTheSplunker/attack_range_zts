@@ -290,7 +290,7 @@ caldera_server:
   hostname: "caldera"
   # Specify the image used for Caldera Server.
 
-  # ------ Changing the versions below could break MITRE Caldera -------------- #
+  # ------ Changing below this line could break MITRE Caldera -------------- #
 
   caldera_version: ""
   # MITRE Caldera Version to install (https://github.com/mitre/caldera/releases). Default: (left blank to pull latest)
@@ -307,6 +307,9 @@ caldera_server:
 
   upx_version: "4.2.4"
   # UPX version to install (https://github.com/upx/upx/releases).
+
+  private_ip: "10.0.1.70"
+  # internal ip for the Caldera server (used for agent communication - no need to change).
 
 simulation:
   atomic_red_team_repo: redcanaryco
